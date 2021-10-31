@@ -1,0 +1,64 @@
+package practice;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+	//Challenge 1: Add two binary numbers together
+
+        Scanner Scanner = new Scanner(System.in);
+        System.out.println("We will start with addition.");
+        System.out.print("Enter first integer: ");
+        int inputOne = Scanner.nextInt();
+        //getting second binary number from user
+        System.out.print("Enter second integer: ");
+        int inputTwo = Scanner.nextInt();
+
+        int add = inputOne + inputTwo;
+
+        System.out.println(add);
+
+    //Challenge 2: Multiplying two numbers
+
+        System.out.println("Now we will move on to multiplication");
+
+        System.out.print("Enter first integer: ");
+        inputOne = Scanner.nextInt();
+        System.out.print("Enter second integer: ");
+        inputTwo = Scanner.nextInt();
+
+        int multiply = inputOne * inputTwo;
+        System.out.println(multiply);
+
+    //Challenge 3: Multiplication table
+
+        System.out.println("Now we will do multiplication tables");
+        System.out.print("Which number would you like to see the multiplication of? ");
+        inputOne = Scanner.nextInt();
+
+        for (int i = 1; i < 11; i++) {
+            System.out.println(inputOne * i);
+        }
+
+        //Challenge 4: Mean of three numbers
+
+        System.out.println("Now we will find the mean of three numbers");
+        System.out.print("Input first integer: ");
+        inputOne = Scanner.nextInt();
+        System.out.print("Input second integer: ");
+        inputTwo = Scanner.nextInt();
+        System.out.print("Input third integer: ");
+        int inputThree = Scanner.nextInt();
+
+        double mean = (inputOne + inputTwo + inputThree) / 3;
+        System.out.println(mean);
+
+        //Challenge 5: Convert Fahrenheit to Celsius
+        System.out.println("Now we will convert Fahrenheit to Celsius");
+        System.out.print("Please enter the temperature in Fahrenheit: ");
+        double tempF = Scanner.nextDouble();
+        double tempC = (5 *(tempF - 32.0)) / 9;
+        System.out.println(tempF + " degrees Fahrenheit is equal to " + tempC + " degrees Celsius!");
+    }
+}
