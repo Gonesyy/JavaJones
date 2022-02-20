@@ -1,0 +1,509 @@
+
+//Scanner function used to take user inputs
+import java.util.Scanner;
+
+public class Game {
+
+    //Scanner to read player inputs
+    Scanner myScanner = new Scanner(System.in);
+    //Pressing enter progresses code
+    Scanner enterScanner = new Scanner(System.in);
+    //Defining variables, can be manipulated through different choices in the game
+    int playerHP;
+    String playerName;
+    String playerWeapon;
+    int choice;
+    int monsterHP;
+    int goblinHP;
+    int zombieHP;
+    int zombieTooth;
+    int goblinFinger;
+
+    //creates the game, starting at Chapter 1: Town Gate
+    public static void main(String[] args) {
+        // calls program
+        Game game;
+        game = new Game();
+
+        // begins function for player setup, when finished, starts Chapter 1: Town Gate
+        game.playerSetUp();
+        game.townGate();
+    }
+
+
+    public void playerSetUp() {
+    // integers representing the health points of the player and monsters to be manipulated in combat
+        playerHP = 10;
+        goblinHP = 15;
+        zombieHP = 18;
+    // variable can be manipulated when finding other weapons
+        playerWeapon = "Knife";
+    // printing out information for the user
+        System.out.println("Your HP: " + playerHP);
+        System.out.println("Your Weapon: " + playerWeapon);
+
+        System.out.println("Please enter your name:");
+    // Reads the next input of the user
+        playerName = myScanner.nextLine();
+    // Calling inputted name
+        System.out.println("Hello " + playerName + ", you awaken outside a Town Gate.");
+
+    }
+    // Function to call chapter 1: Town Gate
+    public void townGate() {
+
+        // \n organizes the selections by creating a new line, dashes for aesthetic purposes
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("A guard is standing in front of you.");
+        // "" signifies a blank line to improve readability
+        System.out.println("");
+        System.out.println("What do you want to do?");
+        System.out.println("");
+        // Choices are labelled 1-3, typing in the respective numbers are read and lead to different outcomes
+        System.out.println("1: Talk to the guard");
+        System.out.println("2: Attack the guard");
+        System.out.println("3: Leave");
+        System.out.println("\n------------------------------------------------------------------\n");
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            // goblin finger is the win condition for the user, obtained from killing the goblin in the other choice
+            if (goblinFinger == 1) {
+                phaseOneEnd();
+            } else {
+                // if the goblin hasn't been slain, returns user to previous state
+                System.out.println("Guard: Hello there, stranger. So your name is " + playerName
+                        + "? \nSorry but we cannot let stranger enter our town.");
+                // enter scanner is used to make game more readable and separate the dialogue
+                enterScanner.nextLine();
+                townGate();
+            }
+        // Choice that punishes player, creates opportunity to heal when selecting other choices
+        } else if (choice == 2) {
+            // decreasing the current player health by one
+            playerHP = playerHP - 1;
+            System.out.println(
+                    "Guard: Hey don't be stupid.\n\nThe guard hit you so hard and you gave up.\n(You receive 1 damage)\n");
+            System.out.println("Your HP: " + playerHP);
+            enterScanner.nextLine();
+            townGate();
+        } else if (choice == 3) {
+            // Cross Road is where the user has options to explore
+            crossRoad();
+        } else {
+            //if no reasonable input is selected, it  replays the dialogue
+            townGate();
+        }
+    }
+
+    public void crossRoad() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You are at a crossroad. If you go south, you will go back to the town.\n\n");
+        //Provides choices that call different functions when entered
+        System.out.println("1: Go north");
+        System.out.println("2: Go east");
+        System.out.println("3: Go south");
+        System.out.println("4: Go west");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+        // scanned input transports player by calling respective function
+        if (choice == 1) {
+            north();
+        } else if (choice == 2) {
+            east();
+        } else if (choice == 3) {
+            townGate();
+        } else if (choice == 4) {
+            west();
+        } else {
+            crossRoad();
+        }
+    }
+        // increases player health by one, useful for preparing for the Goblin fight, or restoring health after running away
+    public void north() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You encounter a river. The water looks suitable to drink.");
+        System.out.println("Your HP is recovered.");
+        // player health is saved throughout the game, increases value by one
+        playerHP = playerHP + 1;
+        System.out.println("Your HP: " + playerHP);
+        System.out.println("\n\n1: Go back to the crossroad");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            crossRoad();
+        } else {
+            north();
+        }
+    }
+    // updates previously established player weapon from Knife to Long Sword
+    public void east() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You walked into a forest and found a Long Sword!");
+        playerWeapon = "Long Sword";
+        System.out.println("Your Weapon: " + playerWeapon);
+        System.out.println("\n\n1: Go back to the crossroad");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            crossRoad();
+        } else {
+            east();
+        }
+    }
+    // triggers attack fight function or returns to safety of cross road
+    public void west() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You encounter a goblin!\n");
+        System.out.println("1: Fight");
+        System.out.println("2: Run");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            // Since there are two monsters, monsterHP is changed depending on which monster is fought
+            monsterHP = goblinHP;
+            fight();
+        } else if (choice == 2) {
+            crossRoad();
+        } else {
+            west();
+        }
+    }
+
+    // if user has chosen to fight, initiates combat sequence where the player chooses to fight or run
+    public void fight() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("Your HP: " + playerHP);
+        System.out.println("Monster HP: " + monsterHP);
+        System.out.println("\n1: Attack");
+        System.out.println("2: Run");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+        //if Attack is chosen, calls attack function where re-playable combat sequence is made
+        if (choice == 1) {
+            attackOne();
+        } else if (choice == 2) {
+            crossRoad();
+        } else {
+            fight();
+        }
+    }
+    // if fight is chosen, then damage is calculated randomly
+    public void attackOne() {
+        int playerDamage = 0;
+        //Two current weapons available which generate a damage number from zero to five (or eight)
+        if (playerWeapon.equals("Knife")) {
+            playerDamage = new java.util.Random().nextInt(5);
+        } else if (playerWeapon.equals("Long Sword")) {
+            playerDamage = new java.util.Random().nextInt(8);
+        }
+        //Shows user interactive health check
+        System.out.println("You attacked the Goblin and gave " + playerDamage + " damage!");
+        //Generated integer is subtracted from current monster health
+        monsterHP = monsterHP - playerDamage;
+
+        System.out.println("Goblin HP: " + monsterHP);
+    // if either monster or player health decreases to zero, the fight ends
+        if (monsterHP < 1) {
+            winOne();
+        } else if (monsterHP > 0) {
+            int monsterDamage = 0;
+        // Monster generates random value from zero to four
+            monsterDamage = new java.util.Random().nextInt(4);
+
+            System.out.println("The Goblin attacked you and dealt " + monsterDamage + " damage!");
+
+            playerHP = playerHP - monsterDamage;
+
+            System.out.println("Player HP: " + playerHP);
+
+            if (playerHP < 1) {
+                dead();
+                // returns player to fight function, where player can choose whether to continue or run
+            } else if (playerHP > 0) {
+                fight();
+            }
+        }
+
+    }
+    //Ends program after declaring defeat
+    public void dead() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You have died.");
+        System.out.println("\n\nGAME OVER");
+        System.out.println("\n------------------------------------------------------------------\n");
+        enterScanner.nextLine();
+        //After pressing enter, terminates console
+        System.exit(0);
+
+    }
+    //After winning the goblin fight, player can now succeed in the previous guard check
+    public void winOne() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You killed the monster!");
+        System.out.println("You obtained a Goblin Finger!\n\n");
+        System.out.println("1: Return");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        goblinFinger = 1;
+
+        choice = myScanner.nextInt();
+        if (choice == 1) {
+            crossRoad();
+        } else { // Goblin finger will always equal one so no bugs are created from repeating dialogue
+            winOne();
+        }
+
+    }
+    // if goblin finger is given to guard, progress to Chapter 2: City Centre
+    public void phaseOneEnd() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("Guard: Oh you killed that goblin? Great!");
+        System.out.println("Guard: It seems that you may be able to solve the problem in our town.");
+        System.out.println("Guard: The city is infested with Zombies, find your way to Dr. Green if you want to help");
+        System.out.println("\n------------------------------------------------------------------\n");
+        enterScanner.nextLine();
+        cityCentre();
+    }
+
+///// Transition from Chapter 1 to Chapter 2, previous functions redefined to create new environment//////
+
+    // similar to Cross Road section, choices direct player to different functions
+    public void cityCentre(){
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You find yourself in the city-centre. The streets are quiet.");
+        System.out.println("1: Go north");
+        System.out.println("2: Go east");
+        System.out.println("3: Go south");
+        System.out.println("4: Go west");
+        System.out.println("\n------------------------------------------------------------------\n");
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            northTwo();
+        } else if (choice == 2) {
+            eastTwo();
+        } else if (choice == 3) {
+            southTwo();
+        } else if (choice == 4) {
+            westTwo();
+        } else {
+            cityCentre();
+        }
+    }
+    //Similar to the river section of chapter 1, but with a twist of random effect
+    public void northTwo() {
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You walked into a tavern. On the table is a drink.");
+        System.out.println("1: Drink.");
+        System.out.println("2: Return to City-Centre.");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            // if user chooses to drink, randomly generates 1 or 2 with 50% odds.
+            int tmp = (int) (Math.random() * 2 + 1); // will return either 1 or 2
+            if (tmp == 1) {
+                // if random integer is 1, it is a healing drink
+                System.out.println("\n------------------------------------------------------------------\n");
+                System.out.println("The drink restored your health!");
+                playerHP = playerHP + 1;
+                System.out.println("Your HP is now: " + playerHP);
+                System.out.println("\n------------------------------------------------------------------\n");
+                enterScanner.nextLine();
+                cityCentre();
+                // if random integer is 2, it is a poisonous drink
+            } else {
+                System.out.println("\n------------------------------------------------------------------\n");
+                System.out.println("The drink was poisoned!");
+                playerHP = playerHP - 1;
+                System.out.println("Your HP is now: " + playerHP);
+                System.out.println("\n------------------------------------------------------------------\n");
+                enterScanner.nextLine();
+                cityCentre();
+            }
+        } else {
+            cityCentre();
+        }
+    }
+    // Enters second fight sequence against the zombie
+    public void eastTwo(){
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You encounter a zombie!\n");
+        System.out.println("1: Fight");
+        System.out.println("2: Run");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            // sets monster health to the predefined zombie health since it was previously zero
+            monsterHP = zombieHP;
+            // calls second fight function for the zombie
+            fightTwo();
+        } else if (choice == 2) {
+            //
+            cityCentre();
+        } else {
+            cityCentre();
+        }
+    }
+
+    public void fightTwo(){
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("Your HP: " + playerHP);
+        System.out.println("Monster HP: " + monsterHP);
+        System.out.println("\n1: Attack");
+        System.out.println("2: Run");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            attackTwo();
+        } else if (choice == 2) {
+            cityCentre();
+        } else {
+            fightTwo();
+        }
+    }
+
+    // Choice leading to weapon upgrade
+    public void southTwo(){
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You walked into a forest and found a Battle Axe!");
+        playerWeapon = "Battle Axe";
+        System.out.println("Your Weapon: " + playerWeapon);
+        System.out.println("\n\n1: Go back to the City Centre");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            cityCentre();
+        } else {
+            southTwo();
+        }
+    }
+
+    public void winTwo() {
+        //Similar to the goblin fight, winning results in the user getting a special item to progress the game
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You killed the monster!");
+        System.out.println("You obtained a Zombie Tooth!\n\n");
+        System.out.println("1: Return");
+        System.out.println("\n------------------------------------------------------------------\n");
+
+        zombieTooth = 1;
+
+        choice = myScanner.nextInt();
+        if (choice == 1) {
+            cityCentre();
+        } else {
+            winTwo();
+        }
+
+    }
+    //Similar to the guard check, going west meets with Dr. Green, who determines if you've met the win condition
+    public void westTwo(){
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("You arrive at Dr. Green's Lab.");
+        System.out.println("There is a small slit in the entrance door.");
+        System.out.println("");
+        System.out.println("What do you want to do?");
+        System.out.println("");
+        System.out.println("1: Talk to Dr. Green");
+        System.out.println("2: Leave");
+        System.out.println("\n------------------------------------------------------------------\n");
+        choice = myScanner.nextInt();
+
+        if (choice == 1) {
+            // zombie tooth is the win condition for the user, obtained from killing the goblin in the other choice
+            if (zombieTooth == 1) {
+                phaseTwoEnd();
+            } else {
+                // if the zombie hasn't been slain, trigger dialogue that returns user to
+                System.out.println("\n------------------------------------------------------------------\n");
+                System.out.println("Dr. Green: I've been told of your arrival " + playerName
+                        + " \nIf you can get rid of a zombie lurking in this city, I can find a cure."
+                        + " \nI recall a report of one lurking in the East." );
+                System.out.println("\n------------------------------------------------------------------\n");
+                enterScanner.nextLine();
+                cityCentre();
+            }
+
+        } else if (choice == 2) {
+            // user returns to City Centre
+            cityCentre();
+        } else {
+            //if no reasonable input is selected, it  replays the dialogue
+            westTwo();
+        }
+    }
+
+    // if fight is chosen, then damage is calculated randomly depending on weapoon
+    public void attackTwo() {
+        int playerDamage = 0;
+
+        if (playerWeapon.equals("Knife")) {
+            playerDamage = new java.util.Random().nextInt(5);
+        } else if (playerWeapon.equals("Long Sword")) {
+            playerDamage = new java.util.Random().nextInt(8);
+            //adds new index for Battle Axe available in the City Centre
+        } else if (playerWeapon.equals("Battle Axe")) {
+            playerDamage = new java.util.Random().nextInt(10);
+        }
+
+        System.out.println("You attacked the monster and gave " + playerDamage + " damage!");
+
+        monsterHP = monsterHP - playerDamage;
+
+        System.out.println("Monster HP: " + monsterHP);
+
+        if (monsterHP < 1) {
+            // calls winTwo instead of winOne since new reward is zombie tooth
+            winTwo();
+        } else if (monsterHP > 0) {
+            int monsterDamage = 0;
+
+            // Zombie is slightly stronger than the goblin, damage ranges from zero to six, in addition to higher health
+            monsterDamage = new java.util.Random().nextInt(6);
+
+            System.out.println("The monster attacked you and dealt " + monsterDamage + " damage!");
+
+            playerHP = playerHP - monsterDamage;
+
+            System.out.println("Player HP: " + playerHP);
+            // user death indicator is the same no matter which monster caused it
+            if (playerHP < 1) {
+                dead();
+            } else if (playerHP > 0) {
+                fightTwo();
+            }
+        }
+
+    }
+
+    //End of the game.
+    public void phaseTwoEnd(){
+        System.out.println("\n------------------------------------------------------------------\n");
+        System.out.println("Dr. Green: A zombie tooth? With this I can extract a cure!");
+        System.out.println("Dr. Green: Thank you, peace will be restored to the city.");
+        System.out.println("\n THE END");
+        System.out.println("\n------------------------------------------------------------------\n");
+        enterScanner.nextLine();
+        //After pressing enter, the program terminates
+        System.exit(0);
+    }
+
+
+}
